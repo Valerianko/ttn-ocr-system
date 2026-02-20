@@ -1,8 +1,11 @@
 venv/
 .idea/
 __pycache__/
-*.jpg
-*.png
 raw_output.txt
 result_*.json
 .env
+
+*.jpg
+!data/
+!data/*.jpg
+*.png
