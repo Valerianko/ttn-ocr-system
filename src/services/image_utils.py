@@ -1,6 +1,8 @@
 import cv2
 import os
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+
 
 class ImageProcessor:
     @staticmethod
@@ -8,22 +10,29 @@ class ImageProcessor:
         return image
 
     @staticmethod
-    def save_debug(img_path, ocr_result, output_dir="debug"):
+    def save_debug(image_np, ocr_result, original_path, output_dir="debug"):
         if not ocr_result: return "None"
         os.makedirs(output_dir, exist_ok=True)
-        img = cv2.imread(img_path)
-        if img is None: return "Error"
+
+        # Конвертируем OpenCV (BGR) в PIL (RGB) для рисования русского текста
+        img_pil = Image.fromarray(cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_pil)
+
+        try:
+            font = ImageFont.truetype("arial.ttf", 22)
+        except:
+            font = ImageFont.load_default()
 
         res = ocr_result[0]
         polys = res.get('dt_polys', []) if isinstance(res, dict) else [line[0] for line in res]
         texts = res.get('rec_texts', []) if isinstance(res, dict) else [line[1][0] for line in res]
 
         for poly, text in zip(polys, texts):
-            pts = np.array(poly, np.int32).reshape((-1, 1, 2))
-            cv2.polylines(img, [pts], True, (0, 255, 0), 2)
-            cv2.putText(img, text[:15], (int(poly[0][0]), int(poly[0][1]-5)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+            flat_poly = [(int(p[0]), int(p[1])) for p in poly]
+            draw.polygon(flat_poly, outline="green", width=3)
+            draw.text((flat_poly[0][0], flat_poly[0][1] - 25), text, fill="red", font=font)
 
-        out_path = os.path.join(output_dir, f"debug_{os.path.basename(img_path)}")
-        cv2.imwrite(out_path, img)
+        out_name = f"debug_{os.path.basename(original_path)}"
+        out_path = os.path.join(output_dir, out_name)
+        img_pil.save(out_path)
         return out_path
