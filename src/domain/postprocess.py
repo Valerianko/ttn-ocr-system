@@ -1,6 +1,5 @@
 import re
 
-
 class DataNormalizer:
     @staticmethod
     def fix_ocr_numbers(text: str) -> str:
@@ -39,4 +38,3 @@ class DataNormalizer:
         if match:
             return f"{match.group(3)}-{match.group(2)}-{match.group(1)}"
         return ""
-

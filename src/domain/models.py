@@ -3,8 +3,8 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 class DocumentType(str, Enum):
-    TTN = "TTN"
-    TN = "TN"
+    TTN = "TTN"  # ТТН-1 (с автомобилем)
+    TN = "TN"    # ТН-2 (без автомобиля)
     UNKNOWN = "UNKNOWN"
 
 class TTNItem(BaseModel):
@@ -15,13 +15,13 @@ class TTNItem(BaseModel):
     price_amount: Optional[str] = Field(default=None, description="Стоимость без НДС")
     vat_rate: Optional[str] = Field(default=None, description="Ставка НДС")
     vat_amount: Optional[str] = Field(default=None, description="Сумма НДС")
-    total_with_vat: Optional[str] = Field(default=None, description="Всего с НДС по строке")
+    total_with_vat: Optional[str] = Field(default=None, description="Стоимость с НДС")
     note: Optional[str] = Field(default=None, description="Примечания: РОЦ, надбавки, сроки")
     raw: Optional[str] = Field(default="", description="Сырая строка из OCR")
 
 class TTNDocument(BaseModel):
     document_type: DocumentType = Field(default=DocumentType.UNKNOWN)
-    date: Optional[str] = Field(default=None, description="Дата в формате YYYY-MM-DD")
+    date: Optional[str] = Field(default=None, description="Дата документа YYYY-MM-DD")
     number: Optional[str] = Field(default=None)
     series: Optional[str] = Field(default=None)
     shipper: Optional[str] = Field(default=None, description="Отправитель: Название + Адрес")

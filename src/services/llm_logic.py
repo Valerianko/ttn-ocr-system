@@ -1,6 +1,7 @@
 from langchain_groq import ChatGroq
 from src.domain.models import TTNDocument
 
+
 class LLMService:
     def __init__(self, api_key: str):
         self.llm = ChatGroq(api_key=api_key, model_name="llama-3.3-70b-versatile", temperature=0)
@@ -29,7 +30,7 @@ class LLMService:
         8. quantity, price, price_amount, vat_rate, vat_amount, total_with_vat — бери только если они явно стоят в одной строке.
         9. reason: (договор, счет).
         10. ИТОГИ: Найди в конце таблицы: grand_total, total_vat_sum, cargo_places (мест), cargo_mass (масса).
-        
+
 
         === ДАННЫЕ OCR ===
         {text}

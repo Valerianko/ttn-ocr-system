@@ -1,6 +1,5 @@
 from paddleocr import PaddleOCR
 
-
 class OCRService:
     def __init__(self):
         self.model = PaddleOCR(use_textline_orientation=True, lang='ru', enable_mkldnn=False)
@@ -27,7 +26,7 @@ class OCRService:
                 if abs(raw_data[i]['y'] - curr[-1]['y']) < 15:
                     curr.append(raw_data[i])
                 else:
-                    lines.append(curr);
+                    lines.append(curr)
                     curr = [raw_data[i]]
             lines.append(curr)
 

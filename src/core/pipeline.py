@@ -4,7 +4,6 @@ from src.domain.postprocess import DataNormalizer
 
 console = Console()
 
-
 class TTNProcessingPipeline:
     def __init__(self, image_proc, ocr_service, llm_service):
         self.image_proc = image_proc
