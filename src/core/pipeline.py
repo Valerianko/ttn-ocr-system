@@ -46,6 +46,10 @@ class TTNProcessingPipeline:
         if doc.consignee_unp: doc.consignee_unp = DataNormalizer.fix_ocr_numbers(doc.consignee_unp)
         if doc.number: doc.number = DataNormalizer.fix_ocr_numbers(doc.number)
 
+        if doc.document_type == "TN":
+            doc.cargo_mass = None
+            doc.cargo_places = None
+
         return doc
 
     def _save_to_file(self, img_path, doc):
